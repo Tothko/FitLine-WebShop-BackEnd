@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Entities
 {
@@ -12,5 +13,6 @@ namespace Entities
         public string Email { get; set; }
         public string Phone { get; set; }
         public List<Address> Addresses { get; set; }
+        public List<Order66> Orders { get; set; }
     }
 }

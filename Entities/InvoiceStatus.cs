@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Entities
 {
-    class Class1
+    public class InvoiceStatus
     {
+        public int ID { get; set; }
+        public string description { get; set; }
     }
 }
