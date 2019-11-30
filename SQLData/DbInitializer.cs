@@ -7,7 +7,7 @@ namespace SQLData
 {
     public static class DbInitializer
     {
-        public static void SeedSB(FitLineContext ctx)
+        public static void SeedDB(FitLineContext ctx)
         {
 
 

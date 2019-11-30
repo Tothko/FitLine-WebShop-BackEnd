@@ -29,22 +29,52 @@ namespace SQLData
         public DbSet<SupplierProduct> SupplierProducts { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<AddressUser> AddressUsers { get; set; }
-        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-/**********************User relations ***************************/
+
+            modelBuilder.Entity<Admin>()
+                .HasKey(u => u.Username);
+            ;
+            
+            modelBuilder.Entity<Order66Status>()
+                .HasKey(oi => oi.ID);
+            ;
+            modelBuilder.Entity<InvoiceStatus>()
+                .HasKey(oi => oi.ID);
+            ;
+            modelBuilder.Entity<SupplierProduct>()
+                .HasKey(p => p.ProductID);
+            ;
+            modelBuilder.Entity<SupplierProduct>()
+                .HasKey(s => s.SupplierID);
+            ;
+
+            modelBuilder.Entity<ShipmentProduct>()
+                .HasKey(oi => oi.OrderItemID);
+            ;
+            modelBuilder.Entity<ShipmentProduct>()
+                .HasKey(s => s.ShipmentID);
+            ;
+
+            modelBuilder.Entity<AddressUser>()
+                .HasKey(u => u.UserID);
+            ;
+            modelBuilder.Entity<AddressUser>()
+                .HasKey(a => a.AddressID);
+            ;
+            /**********************User relations ***************************/
 
             modelBuilder.Entity<User>()
              .HasMany(u => u.Addresses);
 
             modelBuilder.Entity<User>()
              .HasMany(u => u.Orders)
-             .withOne(o => o.User)
+             .WithOne(o => o.User)
              .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Order66>()
              .HasOne(o => o.User)
-             .WithMany(u => u.Orders);
+             .WithMany(u => u.Orders)
             .OnDelete(DeleteBehavior.SetNull);
 
 

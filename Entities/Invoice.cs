@@ -10,7 +10,6 @@ namespace Entities
         public int ID { get; set; }
         public int OrderID { get; set; }
         public Order66 Order { get; set; }
-        public Invoice Invoice { get; set; }
         public List<InvoiceStatus> Statuses { get; set; }
         
         public DateTime date { get; set; }
