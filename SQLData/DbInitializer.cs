@@ -32,7 +32,7 @@ namespace SQLData
             ctx.Admins.Add(new Admin
             {
                 Username = "Jano",
-                Password = "The3G0d42",
+                Password = "Th3G0d42",
 
             });
 

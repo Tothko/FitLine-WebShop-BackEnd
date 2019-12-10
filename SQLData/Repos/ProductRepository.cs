@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public Product FindProductWithID(int Id)
         {
-            return context.Products.FirstOrDefault(p => p.ID == Id);
+            return context.Products.Include(p => p.Category).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Product> ReadProducts()
         {
-            return context.Products;
+            return context.Products.Include(p => p.Category).Include(p => p.Supplier).Include(p => p.Details);
         }
 
         public Product Update(Product ProductUpdate)

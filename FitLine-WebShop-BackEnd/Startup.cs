@@ -61,6 +61,12 @@ namespace FitLine_WebShop_BackEnd
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
 
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
+            services.AddScoped<IProductImageService, ProductImageService>();
+
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<IProductDetailService, ProductDetailService>();
+
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
             services.AddScoped<IShipmentService, ShipmentService>();
 
@@ -69,6 +75,9 @@ namespace FitLine_WebShop_BackEnd
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMvc().AddJsonOptions(options => {

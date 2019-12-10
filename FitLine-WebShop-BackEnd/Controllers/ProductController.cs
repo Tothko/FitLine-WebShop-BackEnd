@@ -41,22 +41,6 @@ namespace FitLine_WebShop_BackEnd.Controllers
             {
                 return BadRequest("Name required.");
             }
-            else if (Product.Price == 0)
-            {
-                return BadRequest("Price required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Weight))
-            {
-                return BadRequest("Weight required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Description))
-            {
-                return BadRequest("Description required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Flavour))
-            {
-                return BadRequest("Flavour required.");
-            }
             _ProductService.Create(Product);
             return Ok("Product successfully created.");
         }
@@ -68,26 +52,6 @@ namespace FitLine_WebShop_BackEnd.Controllers
             if (id < 1 || id != Product.ID)
             {
                 return BadRequest("Parameter ID and address ID must be the same.");
-            }
-            else if (string.IsNullOrEmpty(Product.Name))
-            {
-                return BadRequest("Name required.");
-            }
-            else if (Product.Price == 0)
-            {
-                return BadRequest("Price required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Weight))
-            {
-                return BadRequest("Weight required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Description))
-            {
-                return BadRequest("Description required.");
-            }
-            else if (string.IsNullOrEmpty(Product.Flavour))
-            {
-                return BadRequest("Flavour required.");
             }
             _ProductService.Update(Product);
             return Ok("Address was successfully updated.");

@@ -16,6 +16,7 @@ namespace SQLData
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order66> Orders { get; set; }
         public DbSet<Order66ItemStatus> Order66ItemStatuses { get; set; }
@@ -36,7 +37,17 @@ namespace SQLData
             modelBuilder.Entity<Admin>()
                 .HasKey(u => u.Username);
             ;
-            
+
+            modelBuilder.Entity<Product>()
+                .HasKey(oi => oi.ID);
+            ;
+            modelBuilder.Entity<ProductDetail>()
+                .HasKey(oi => oi.ID);
+            ;
+            modelBuilder.Entity<ProductImage>()
+                .HasKey(oi => oi.ID);
+            ;
+
             modelBuilder.Entity<Order66Status>()
                 .HasKey(oi => oi.ID);
             ;
@@ -111,17 +122,43 @@ namespace SQLData
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)
                 .OnDelete(DeleteBehavior.SetNull);
-/****************************************************************************************/
 
-/**********************Relation between product his images ***************************/
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Categories)
+                .WithOne(c => c.ParentCategory)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.ParentCategory)
+                .WithMany(c => c.Categories)
+                .OnDelete(DeleteBehavior.SetNull);
+            /****************************************************************************************/
+
+            /**********************Relation between product his images ***************************/
+
+
+            modelBuilder.Entity<ProductDetail>()
                 .HasMany(p => p.Images)
-                .WithOne(i => i.Product)
+                .WithOne(i => i.ProductDetail)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<ProductImage>()
-                .HasOne(i => i.Product)
+                .HasOne(i => i.ProductDetail)
                 .WithMany(p => p.Images)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
+            /************************************************************************************/
+
+            /**********************Relation between product his details ***************************/
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Details)
+                .WithOne(d => d.Product)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ProductDetail>()
+                .HasOne(d => d.Product)
+                .WithMany(p => p.Details)
                 .OnDelete(DeleteBehavior.SetNull);
 
 

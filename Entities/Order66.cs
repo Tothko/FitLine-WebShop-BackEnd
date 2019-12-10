@@ -13,7 +13,6 @@ namespace Entities
         public List<Order66Status> Statuses { get; set; }
         public List<Order66Product> OrderProducts { get; set; }
         public Invoice Invoice { get; set; }
-
         public List<Shipment> Shipments { get; set; }
         public DateTime DateOfPlacement { get; set; }
         public string Details { get; set; }
