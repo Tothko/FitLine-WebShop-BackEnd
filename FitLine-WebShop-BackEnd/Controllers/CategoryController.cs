@@ -28,10 +28,10 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]   
-        public ActionResult<Category> Get(int id)
+        [HttpGet("{name}")]   
+        public ActionResult<Category> Get(string Name)
         {
-            return _CategoryService.FindCategoryWithID(id);
+            return _CategoryService.FindCategoryWithName(Name);
         }
 
         // POST api/<controller>

@@ -10,9 +10,12 @@ namespace Entities
         public int CategoryID { get; set; }
         public Supplier Supplier { get; set; }
         public int SupplierID { get; set; }
-        public List<ProductDetail> Details { get; set; }
+        public List<ProductImage> Images { get; set; }
         public string Name { get; set; }
+        public int Amount { get; set; }
+        public double Price { get; set; }
+        public int Weight { get; set; }
+        public string Flavour { get; set; }
 
-        
     }
 }

@@ -29,6 +29,11 @@ namespace AppCore.Appliaction_Services_Impl
             return CategoryRepo.FindCategoryWithID(Id);
         }
 
+        public Category FindCategoryWithName(string name)
+        {
+            return CategoryRepo.FindCategoryWithName(name);
+        }
+
         public IEnumerable<Category> ReadCategories()
         {
             return CategoryRepo.ReadCategories();

@@ -5,6 +5,10 @@ namespace Entities
     public class Address
     {
         public int ID { get; set; }
+        public User User { get; set; }
+        public int UserID { get; set; }
+        public Supplier Supplier { get; set; }
+        public int SupplierID { get; set; }
         public string Country { get; set; }
         public string Region { get; set; }
         public string City { get; set; }

@@ -64,8 +64,7 @@ namespace FitLine_WebShop_BackEnd
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IProductImageService, ProductImageService>();
 
-            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
-            services.AddScoped<IProductDetailService, ProductDetailService>();
+           
 
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
             services.AddScoped<IShipmentService, ShipmentService>();

@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public Shipment FindShipmentWithID(int Id)
         {
-            return context.Shipments.FirstOrDefault(p => p.ID == Id);
+            return context.Shipments.Include(p => p.Order).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Shipment> ReadShipments()
         {
-            return context.Shipments;
+            return context.Shipments.Include(p => p.Order);
         }
 
         public Shipment Update(Shipment ShipmentUpdate)

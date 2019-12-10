@@ -41,7 +41,7 @@ namespace SQLData.Repos
 
         public IEnumerable<Supplier> ReadSuppliers()
         {
-            return context.Suppliers;
+            return context.Suppliers.Include(p => p.Addresses);
         }
 
         public Supplier Update(Supplier SupplierUpdate)
