@@ -33,6 +33,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
             return _ProductService.FindProductWithID(id);
         }
 
+        
         // POST api/<controller>
         [HttpPost]
         public ActionResult<Product> Post([FromBody]Product Product)

@@ -39,14 +39,6 @@ namespace SQLData.Repos
 
         }
 
-        public Category FindCategoryWithName(string name)
-        {
-           
-            return context.Categories.Include(c => c.Categories).ThenInclude(ca => ca.Categories).ThenInclude(ca => ca.Products)
-                                     .Include(c => c.Products).ThenInclude(p => p.Images)
-                                     .FirstOrDefault(p => p.Name == name);
-        }
-
         public IEnumerable<Category> ReadCategories()
         {
             return context.Categories.Include(p => p.Categories).Include(p => p.Products);

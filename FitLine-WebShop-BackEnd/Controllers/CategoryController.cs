@@ -31,7 +31,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         [HttpGet("{name}")]   
         public ActionResult<Category> Get(string Name)
         {
-            return _CategoryService.FindCategoryWithName(Name);
+            return _CategoryService.FindCategoryProductsByCategoryName(Name);
         }
 
         // POST api/<controller>

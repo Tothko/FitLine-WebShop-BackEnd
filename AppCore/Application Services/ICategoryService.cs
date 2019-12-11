@@ -10,6 +10,6 @@ namespace AppCore.Appliaction_Services_Impl
         Category Delete(int Id);
         Category Update(Category CategoryUpdate);
         Category FindCategoryWithID(int Id);
-        Category FindCategoryWithName(string name);
+        Category FindCategoryProductsByCategoryName(string name);
     }
 }
