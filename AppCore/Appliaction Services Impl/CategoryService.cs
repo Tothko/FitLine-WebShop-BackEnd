@@ -38,14 +38,21 @@ namespace AppCore.Appliaction_Services_Impl
         public Category FindCategoryProductsByCategoryName(string name)
 
         {
-            AllCategories = CategoryRepo.ReadCategories().ToList();
-            AllProducts = ProductRepo.ReadProducts().ToList();
-            Category FoundCategory;
+            AllCategories = CategoryRepo.ReadSimpleCategories().ToList();
+            AllProducts = ProductRepo.ReadSimpleProducts().ToList();
+
+            Category FoundCategory = new Category();
             FoundCategory = AllCategories.Find(c => c.Name == name);
+
             WantedCategories.Add(FoundCategory);
             SearchForSubCategories(FoundCategory);
-            FoundCategory.Products = FindProducts(WantedCategories);
-             
+            List<Product> WantedProducts = FindProducts(WantedCategories);
+            foreach (Product Product in WantedProducts)
+            {
+                FoundCategory.Products.Add(Product);
+            }
+            
+
             return FoundCategory;
         }
 
@@ -62,7 +69,7 @@ namespace AppCore.Appliaction_Services_Impl
             return FoundProducts;
         }
 
-        private List<Category> SearchForSubCategories(Category FoundCategory)
+        private void SearchForSubCategories(Category FoundCategory)
         {
             List<Category> SubCategories = new List<Category>();
             foreach (Category cat in AllCategories)
@@ -79,7 +86,7 @@ namespace AppCore.Appliaction_Services_Impl
                 }
             }
             
-            return null;
+           
         }
 
         public IEnumerable<Category> ReadCategories()

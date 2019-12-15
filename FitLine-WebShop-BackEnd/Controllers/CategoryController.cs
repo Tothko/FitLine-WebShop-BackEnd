@@ -27,7 +27,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
             return _CategoryService.ReadCategories();
         }
 
-        // GET api/<controller>/5
+        // GET api/<controller>/nameOfCat
         [HttpGet("{name}")]   
         public ActionResult<Category> Get(string Name)
         {

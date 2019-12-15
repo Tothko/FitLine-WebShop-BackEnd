@@ -45,6 +45,11 @@ namespace SQLData.Repos
             return FakeCategories;
         }
 
+        public IEnumerable<Category> ReadSimpleCategories()
+        {
+            return FakeCategories;
+        }
+
         public Category Update(Category CategoryUpdate)
         {
             return null;

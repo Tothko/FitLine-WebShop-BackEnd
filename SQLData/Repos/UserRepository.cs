@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public User FindUserWithID(int Id)
         {
-            return context.Users.FirstOrDefault(p => p.ID == Id);
+            return context.Users.Include(p => p.Addresses).Include(p => p.Orders).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<User> ReadUsers()
         {
-            return context.Users;
+            return context.Users.Include(p => p.Addresses).Include(p => p.Orders);
         }
 
         public User Update(User UserUpdate)

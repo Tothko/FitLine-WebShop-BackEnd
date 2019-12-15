@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public Order66 FindOrder66WithID(int Id)
         {
-            return context.Orders.FirstOrDefault(p => p.ID == Id);
+            return context.Orders.Include(p => p.Invoice).Include(p => p.Shipments).Include(p => p.User).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Order66> ReadOrders()
         {
-            return context.Orders;
+            return context.Orders.Include(p => p.Invoice).Include(p => p.Shipments).Include(p => p.User);
         }
 
         public Order66 Update(Order66 Order66Update)

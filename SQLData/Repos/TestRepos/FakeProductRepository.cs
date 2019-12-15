@@ -57,9 +57,19 @@ namespace SQLData.Repos
             return FakeProducts;
         }
 
+        public object ReadSimpleProducts()
+        {
+            return FakeProducts;
+        }
+
         public Product Update(Product ProductUpdate)
         {
             return null;
+        }
+
+        IEnumerable<Product> IProductRepository.ReadSimpleProducts()
+        {
+            throw new NotImplementedException();
         }
     }
     }

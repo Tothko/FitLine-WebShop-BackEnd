@@ -44,6 +44,11 @@ namespace SQLData.Repos
             return context.Products.Include(p => p.Category).Include(p => p.Supplier).Include(p => p.Images);
         }
 
+        public IEnumerable<Product> ReadSimpleProducts()
+        {
+            return context.Products;
+        }
+
         public Product Update(Product ProductUpdate)
         {
             context.Attach(ProductUpdate).State = EntityState.Modified;

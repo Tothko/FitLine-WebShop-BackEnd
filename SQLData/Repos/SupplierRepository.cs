@@ -35,7 +35,7 @@ namespace SQLData.Repos
 
         public Supplier FindSupplierWithID(int Id)
         {
-            return context.Suppliers.FirstOrDefault(p => p.ID == Id);
+            return context.Suppliers.Include(p => p.Addresses).FirstOrDefault(p => p.ID == Id);
 
         }
 

@@ -35,13 +35,25 @@ namespace SQLData.Repos
 
         public Address FindAddressWithID(int Id)
         {
-            return context.Addresses.FirstOrDefault(p => p.ID == Id);
+            if (context.Addresses.FirstOrDefault(p => p.ID == Id).Supplier != null)
+            {
+                return context.Addresses.Include(a => a.Supplier).FirstOrDefault(p => p.ID == Id);
+            }
+            else if (context.Addresses.FirstOrDefault(p => p.ID == Id).User != null)
+            {
+                return context.Addresses.Include(a => a.User).FirstOrDefault(p => p.ID == Id);
+            }
+            else
+            {
+                return context.Addresses.FirstOrDefault(p => p.ID == Id);
+            }
             
         }
 
         public IEnumerable<Address> ReadAddresses()
         {
-            return context.Addresses;
+            
+            return context.Addresses.Include(p => p.Supplier).Include(p => p.User);
         }
 
         public Address Update(Address AddressUpdate)

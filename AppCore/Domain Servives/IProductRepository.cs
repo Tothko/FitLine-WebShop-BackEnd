@@ -12,5 +12,6 @@ namespace AppCore.Domain_Servives
         Product Delete(int Id);
         Product Update(Product ProductUpdate);
         Product FindProductWithID(int Id);
+        IEnumerable<Product> ReadSimpleProducts(); 
     }
 }

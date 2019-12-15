@@ -12,6 +12,6 @@ namespace AppCore.Domain_Servives
         Category Delete(int Id);
         Category Update(Category CategoryUpdate);
         Category FindCategoryWithID(int Id);
-        
+        IEnumerable<Category> ReadSimpleCategories();
     }
 }

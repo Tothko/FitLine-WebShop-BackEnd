@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public Invoice FindInvoiceWithID(int Id)
         {
-            return context.Invoices.FirstOrDefault(p => p.ID == Id);
+            return context.Invoices.Include(p => p.Order).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Invoice> ReadInvoices()
         {
-            return context.Invoices;
+            return context.Invoices.Include(p => p.Order);
         }
 
         public Invoice Update(Invoice InvoiceUpdate)
