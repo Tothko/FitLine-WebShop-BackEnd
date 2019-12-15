@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+/*
 namespace SQLData.Repos
 {
     public class FakeCategoryRepository : ICategoryRepository
@@ -57,3 +57,4 @@ namespace SQLData.Repos
     }
     
 }
+*/

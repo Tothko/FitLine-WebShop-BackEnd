@@ -5,13 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+/*
 namespace SQLData.Repos
 {
     public class FakeProductRepository : IProductRepository
     {
 
-
+        
         private readonly List<Product> FakeProducts = new List<Product>()
             {
             new Product {ID = 1, Name = "TestProduct1", CategoryID = 1},
@@ -72,5 +72,5 @@ namespace SQLData.Repos
             throw new NotImplementedException();
         }
     }
-    }
+    }*/
 

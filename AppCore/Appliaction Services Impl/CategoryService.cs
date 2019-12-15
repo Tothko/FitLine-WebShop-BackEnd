@@ -10,65 +10,113 @@ namespace AppCore.Appliaction_Services_Impl
 {
     public class CategoryService : ICategoryService
     {
-        private List<Category> WantedCategories = new List<Category>();
-        private ICategoryRepository CategoryRepo;
-        private IProductRepository ProductRepo;
-        private List<Category> AllCategories;
-        private List<Product> AllProducts;
+        private ICategoryRepository _categoryRepo;
+        private IProductRepository _productRepo;
+
         public CategoryService(ICategoryRepository CategoryRepository, IProductRepository ProductRepository)
         {
-            CategoryRepo = CategoryRepository;
-            ProductRepo = ProductRepository;
-        }
-        public Category Create(Category Category)
-        {
-            return CategoryRepo.Create(Category);
+            _categoryRepo = CategoryRepository;
+            _productRepo = ProductRepository;
         }
 
-        public Category Delete(int Id)
+        public Category Create(Category category)
         {
-            return CategoryRepo.Delete(Id);
+            if(category == null)
+            {
+                throw new ArgumentException("Cannot create null category");
+            }
+
+            if(category.Name == null)
+            {
+                throw new ArgumentException("Cannot create category without a name");
+            }
+
+            if(category.Name == "")
+            {
+                throw new ArgumentException("Cannot create category with blank name");
+            }
+
+            if(category.ParentCategory != null)
+            {
+                var parent = _categoryRepo.FindCategoryWithID(category.ParentCategory.ID);
+
+                if(parent == null)
+                {
+                    throw new ArgumentException("Category contains invalid parent category");
+                }
+            }
+
+            return _categoryRepo.Create(category);
+        }
+
+        public Category Delete(int id)
+        {
+            if (id < 1)
+            {
+                throw new ArgumentException("Category Id has to be bigger than 0");
+            }
+
+            return _categoryRepo.Delete(id);
         }
 
         public Category FindCategoryWithID(int Id)
         {
-            return CategoryRepo.FindCategoryWithID(Id);
+            return _categoryRepo.FindCategoryWithID(Id);
         }
 
         public Category FindCategoryProductsByCategoryName(string name)
-
         {
-            AllCategories = CategoryRepo.ReadSimpleCategories().ToList();
-            AllProducts = ProductRepo.ReadSimpleProducts().ToList();
+            var allCategories = _categoryRepo.ReadCategories();
 
-            Category FoundCategory = new Category();
-            FoundCategory = AllCategories.Find(c => c.Name == name);
+            var foundCategory = allCategories.Where(c => c.Name.Equals(name))
+                .FirstOrDefault();
 
-            WantedCategories.Add(FoundCategory);
-            SearchForSubCategories(FoundCategory);
-            List<Product> WantedProducts = FindProducts(WantedCategories);
-            foreach (Product Product in WantedProducts)
+            if(foundCategory == null)
             {
-                FoundCategory.Products.Add(Product);
+                throw new ArgumentException($"There is no category by name: {name}");
             }
-            
 
-            return FoundCategory;
+            
+          /*  var allProducts = _productRepo.ReadSimpleProducts();
+
+            var wantedCategories = GetSubCategories(foundCategory);
+            var wantedProducts = FindProducts(wantedCategories,allProducts);
+            foreach (Product Product in wantedProducts)
+            {
+                foundCategory.Products.Add(Product);
+            }*/
+         
+            return foundCategory;
         }
 
-        private List<Product> FindProducts(List<Category> WantedCategories)
+        /*private List<Product> FindProducts(IEnumerable<Category> WantedCategories,IEnumerable<Product> allProducts)
         {
             List<Product> FoundProducts = new List<Product>();
             foreach (Category cat in WantedCategories)
             {
-                foreach (Product prod in AllProducts)
+                foreach (Product prod in allProducts)
                 {
                     if (prod.CategoryID == cat.ID) FoundProducts.Add(prod);
                 }
             }
             return FoundProducts;
-        }
+        }*/
 
+        private IEnumerable<Category> GetSubCategories(Category category)
+        {
+            var rval = new List<Category>();
+            rval.Add(category);
+
+            if (category.Categories != null && category.Categories.Count > 0)
+            {
+                foreach (var children in category.Categories)
+                {
+                    rval = rval.Concat(GetSubCategories(children)).ToList();
+                }
+            }
+            return rval;
+        }
+        /*
         private void SearchForSubCategories(Category FoundCategory)
         {
             List<Category> SubCategories = new List<Category>();
@@ -85,18 +133,41 @@ namespace AppCore.Appliaction_Services_Impl
                     SubCategories.RemoveAt(0);
                 }
             }
-            
-           
-        }
+        }*/
 
         public IEnumerable<Category> ReadCategories()
         {
-            return CategoryRepo.ReadCategories();
+            return _categoryRepo.ReadCategories();
         }
 
-        public Category Update(Category CategoryUpdate)
+        public Category Update(Category category)
         {
-            return CategoryRepo.Update(CategoryUpdate);
+            if (category == null)
+            {
+                throw new ArgumentException("Cannot update null category");
+            }
+
+            if (category.Name == null)
+            {
+                throw new ArgumentException("Cannot update category without a name");
+            }
+
+            if (category.Name == "")
+            {
+                throw new ArgumentException("Cannot update category with blank name");
+            }
+
+            if (category.ParentCategory != null)
+            {
+                var parent = _categoryRepo.FindCategoryWithID(category.ParentCategory.ID);
+
+                if (parent == null)
+                {
+                    throw new ArgumentException("Category contains invalid parent category");
+                }
+            }
+
+            return _categoryRepo.Update(category);
         }
     }
 }

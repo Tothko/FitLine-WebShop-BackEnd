@@ -9,6 +9,8 @@ namespace AppCore.Application_Services
     {
 
         IEnumerable<Product> ReadProducts();
+
+        IEnumerable<Product> ReadFiltered(ProductsFilter filter);
         Product Create(Product Product);
         Product Delete(int Id);
         Product Update(Product ProductUpdate);

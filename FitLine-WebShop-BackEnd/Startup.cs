@@ -7,47 +7,66 @@ using AppCore.Application_Services;
 using AppCore.Domain_Servives;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SQLData;
 using SQLData.Repos;
 
-namespace FitLine_WebShop_BackEnd
+namespace FitLineBackEnd
 {
     public class Startup
     {
+        private IHostingEnvironment _env { get; }
+        private IConfiguration _conf { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
-            Environment = env;
+            _env = env;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            _conf = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.IsDevelopment())
+            //-------------Setting up Database-----------------//
+            if (_env.IsDevelopment())
             {
                 services.AddDbContext<FitLineContext>(
-                      opt =>
-                      {
-                          opt.UseSqlite("Data Source=FitLineDB.db");
-                      });
+                    opt => opt.UseSqlite("Data Source=FitLineDB.db"));
             }
-            else
+            else if (_env.IsProduction())
             {
-                // Azure SQL database:
-                services.AddDbContext<FitLineContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+                services.AddDbContext<FitLineContext>(
+                    opt => opt
+                        .UseSqlServer(_conf.GetConnectionString("defaultConnection")));
             }
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAddressService, AddressService>();
@@ -64,8 +83,6 @@ namespace FitLine_WebShop_BackEnd
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IProductImageService, ProductImageService>();
 
-           
-
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
             services.AddScoped<IShipmentService, ShipmentService>();
 
@@ -77,45 +94,37 @@ namespace FitLine_WebShop_BackEnd
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddMvc().AddJsonOptions(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
-
             if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-
                     var ctx = scope.ServiceProvider.GetService<FitLineContext>();
                     DbInitializer.SeedDB(ctx);
-
                 }
-                app.UseDeveloperExceptionPage();
-
             }
             else
             {
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-
                     var ctx = scope.ServiceProvider.GetService<FitLineContext>();
-                    DbInitializer.SeedDB(ctx);
+                    ctx.Database.EnsureCreated();
                 }
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("MyPolicy");
+
             app.UseMvc();
+
         }
     }
 }

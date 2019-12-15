@@ -8,7 +8,8 @@ namespace SQLData
 {
     public class FitLineContext : DbContext
     {
-        public FitLineContext(DbContextOptions<FitLineContext> opt) : base(opt)
+        public FitLineContext(DbContextOptions<FitLineContext> opt) 
+            : base(opt)
         {
 
         }
@@ -111,15 +112,17 @@ namespace SQLData
                 .WithMany(c => c.Products)
                 .OnDelete(DeleteBehavior.SetNull);
 
+
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.ParentCategory)
+                .WithMany(c => c.Categories)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.Categories)
-                .WithOne(c => c.ParentCategory)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
