@@ -49,11 +49,20 @@ namespace FitLine_WebShop_BackEnd.Controllers
 
         // GET api/products
         [HttpGet]
-        public ActionResult<IEnumerable<ProductDTO>> Get()
+        public ActionResult<IEnumerable<ProductDTO>> Get([FromQuery] ProductsFilter filter)
         {
             try
             {
-                var products = _productService.ReadProducts();
+                IEnumerable<Product> products;
+
+                if(filter != null)
+                {
+                    products = _productService.ReadFiltered(filter);
+                }
+                else
+                {
+                    products = _productService.ReadProducts();
+                }                
 
                 if (products == null || products.Count() < 1)
                 {
@@ -126,7 +135,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
 
                 if (newProduct != null)
                 {
-                    return Ok("Product successfully created.");
+                    return Ok(newProduct);
                 }
                 else
                 {
@@ -169,7 +178,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
 
                 if (newProduct != null)
                 {
-                    return Ok("Product successfully created.");
+                    return Ok(newProduct);
                 }
                 else
                 {
@@ -203,7 +212,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
 
                     if (deletedProduct != null)
                     {
-                        return Ok("Product successfully deleted.");
+                        return Ok(deletedProduct);
                     }
                     else
                     {

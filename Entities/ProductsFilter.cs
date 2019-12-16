@@ -10,6 +10,7 @@ namespace Entities
         {
             MaxPrice = double.MaxValue;
             MinPrice = double.MinValue;
+            Ordering = OrderingType.TopRated;
             CategoryId = 0;
         }
         public int CategoryId { get; set; }
@@ -26,6 +27,16 @@ namespace Entities
 
         public string SearchTextName { get; set; }
 
+        public enum OrderingType
+        {
+            TopRated,
+            MostExpensive,
+            LeastExpensive,
+            MostSold
+        }
+
+        public OrderingType Ordering { get; set; }
+
         public bool Accepts(Product product)
         {
             if (!String.IsNullOrEmpty(SearchTextName) && !product.Name.Contains(SearchTextName))
@@ -33,7 +44,7 @@ namespace Entities
                 return false;
             }
 
-            if (product.Price < MinPrice || product.Price > MaxPrice)
+            if (MinPrice != MaxPrice && (product.Price < MinPrice || product.Price > MaxPrice))
             {
                 return false;
             }

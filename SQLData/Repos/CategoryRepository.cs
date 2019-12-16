@@ -35,13 +35,13 @@ namespace SQLData.Repos
 
         public Category FindCategoryWithID(int Id)
         {
-            return context.Categories.Include(p => p.Categories).Include(p => p.Products).FirstOrDefault(p => p.ID == Id);
+            return context.Categories.Include(p => p.Children).Include(p => p.Products).FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Category> ReadCategories()
         {
-            return context.Categories.Include(p => p.Categories);
+            return context.Categories.Include(p => p.Children);
         }
         public IEnumerable<Category> ReadSimpleCategories()
         {

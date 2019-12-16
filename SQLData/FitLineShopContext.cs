@@ -115,7 +115,7 @@ namespace SQLData
 
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
-                .WithMany(c => c.Categories)
+                .WithMany(c => c.Children)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Category>()
@@ -126,7 +126,7 @@ namespace SQLData
 
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
-                .WithMany(c => c.Categories)
+                .WithMany(c => c.Children)
                 .OnDelete(DeleteBehavior.SetNull);
             /****************************************************************************************/
 

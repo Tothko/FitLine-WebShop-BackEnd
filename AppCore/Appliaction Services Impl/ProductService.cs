@@ -108,9 +108,9 @@ namespace AppCore.Appliaction_Services_Impl
             var rval = new List<int>();
             rval.Add(cat.ID);
 
-            if (cat.Categories != null && cat.Categories.Count > 0)
+            if (cat.Children != null && cat.Children.Count > 0)
             {
-                foreach (var children in cat.Categories)
+                foreach (var children in cat.Children)
                 {
                     rval = rval.Concat(GetCategoriesSubIds(children)).ToList();
                 }
@@ -127,6 +127,7 @@ namespace AppCore.Appliaction_Services_Impl
 
             var allItems = _productRepo.ReadProducts()
                 .Where(item => filter.Accepts(item));
+             
             IEnumerable<Product> page;
 
             if (filter.CategoryId > 0)
@@ -136,7 +137,25 @@ namespace AppCore.Appliaction_Services_Impl
                 var acceptedCategoryIds = GetCategoriesSubIds(category);
 
                 allItems = allItems
+                    .Select(e => e)
                     .Where(item => acceptedCategoryIds.Contains(item.Category.ID));
+            }
+
+             switch (filter.Ordering)
+            {
+                case ProductsFilter.OrderingType.TopRated:
+                    allItems = allItems.OrderByDescending(item => item.Rating);
+                    break;
+                case ProductsFilter.OrderingType.MostExpensive:
+                    allItems = allItems.OrderByDescending(item => item.Price);
+                    break;
+                case ProductsFilter.OrderingType.LeastExpensive:
+                    allItems = allItems.OrderBy(item => item.Price);
+                    break;
+                case ProductsFilter.OrderingType.MostSold:
+                    break;
+                default:
+                    break;
             }
 
             page = allItems

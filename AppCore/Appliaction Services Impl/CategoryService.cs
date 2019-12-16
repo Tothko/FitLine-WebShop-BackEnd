@@ -68,7 +68,7 @@ namespace AppCore.Appliaction_Services_Impl
         {
             var allCategories = _categoryRepo.ReadCategories();
 
-            var foundCategory = allCategories.Where(c => c.Name.Equals(name))
+            var foundCategory = allCategories.Where(c => c.Name.ToLower().Equals(name.ToLower()))
                 .FirstOrDefault();
 
             if(foundCategory == null)
@@ -107,9 +107,9 @@ namespace AppCore.Appliaction_Services_Impl
             var rval = new List<Category>();
             rval.Add(category);
 
-            if (category.Categories != null && category.Categories.Count > 0)
+            if (category.Children != null && category.Children.Count > 0)
             {
-                foreach (var children in category.Categories)
+                foreach (var children in category.Children)
                 {
                     rval = rval.Concat(GetSubCategories(children)).ToList();
                 }

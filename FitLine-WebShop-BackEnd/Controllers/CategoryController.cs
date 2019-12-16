@@ -6,6 +6,7 @@ using AppCore.Appliaction_Services_Impl;
 using AppCore.Application_Services;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using NLog.Fluent;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,63 +16,184 @@ namespace FitLine_WebShop_BackEnd.Controllers
     public class CategoryController : Controller
     {
 
-        private readonly ICategoryService _CategoryService;
+        private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService CategoryService)
         {
-            _CategoryService = CategoryService;
+            _categoryService = CategoryService;
         } 
+
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Category> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return _CategoryService.ReadCategories();
+            try
+            {
+                var categories = _categoryService.ReadCategories();
+
+                if (categories == null || categories.Count() < 1)
+                {
+                    return NotFound("There are no categories in database");
+                }
+                else
+                {
+                    var categoryDTOs = new List<object>();
+                    foreach (var item in categories)
+                    {
+                        categoryDTOs.Add(new
+                        {
+                            Id = item.ID,
+                            Name = item.Name
+                        });
+                    }
+                    return Ok(categoryDTOs);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Exception occured on CategoryController GetAll\n Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // GET api/<controller>/nameOfCat
         [HttpGet("{name}")]   
-        public ActionResult<Category> Get(string Name)
+        public ActionResult<Category> Get(string name)
         {
-            return _CategoryService.FindCategoryProductsByCategoryName(Name);
+            try
+            {
+                if(String.IsNullOrEmpty(name))
+                {
+                    return BadRequest("Cannot read category by name without provided name");
+                }
+
+                var category = _categoryService.FindCategoryProductsByCategoryName(name);
+
+                if(category == null)
+                {
+                    return NotFound($"There is no category by name: {name}");
+                }
+
+                return Ok(category);
+            }
+            catch (ArgumentException err)
+            {
+                return BadRequest(err.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Exception occured on CategoryController GetByName on name: {name}\n Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public ActionResult<Category> Post([FromBody]Category Category)
+        public ActionResult<Category> Post([FromBody]Category category)
         {
-            if (string.IsNullOrEmpty(Category.Name))
+            if(category == null)
             {
-                return BadRequest("Name required.");
+                return BadRequest("Cannot create null category");
             }
-            _CategoryService.Create(Category);
-            return Ok("Category successfully created.");
+
+            if (string.IsNullOrEmpty(category.Name))
+            {
+                return BadRequest("Category name is required.");
+            }
+
+            try
+            {
+                var cat = _categoryService.Create(category);
+
+                if(cat == null)
+                {
+                    return BadRequest("Category creation failed");
+                }
+
+                return Ok(cat);
+            }
+            catch (ArgumentException err)
+            {
+                return BadRequest(err.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Exception occured on CategoryController Post on object: {category}\n Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public ActionResult<Category> Put(int id, [FromBody] Category Category)
+        public ActionResult<Category> Put(int id, [FromBody] Category category)
         {
-            if (id < 1 || id != Category.ID)
+            if(category == null)
+            {
+                return BadRequest("You must provide category to update category");
+            }
+
+            if (id < 1 || id != category.ID)
             {
                 return BadRequest("Parameter ID and Category ID must be the same.");
             }
-            else if (string.IsNullOrEmpty(Category.Name))
+            else if (string.IsNullOrEmpty(category.Name))
             {
-                return BadRequest("Name required.");
+                return BadRequest("Category name is required.");
             }
-            _CategoryService.Update(Category);
-            return Ok("Category was successfully updated.");
+
+            try
+            {
+                var cat = _categoryService.Update(category);
+
+                if(cat == null)
+                {
+                    return BadRequest("Category update has failed");
+                }
+
+                return Ok(cat);
+            }
+            catch (ArgumentException err)
+            {
+                return BadRequest(err.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Exception occured on CategoryController Put on object: {category}\n Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         public ActionResult<Category> Delete(int id)
         {
-            if (null == _CategoryService.FindCategoryWithID(id))
+            if (null == _categoryService.FindCategoryWithID(id))
+            {
                 return BadRequest("There is no Category with this ID.");
+            }
             else
             {
-                _CategoryService.Delete(id);
-                return Ok("Category deleted.");
+                try
+                {
+                    var deletedCategory = _categoryService.Delete(id);
+
+                    if (deletedCategory  != null)
+                    {
+                        return Ok(deletedCategory);
+                    }
+                    else
+                    {
+                        return NotFound("No such category exist");
+                    }
+                }
+                catch (ArgumentException err)
+                {
+                    return BadRequest(err.Message);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Exception occured on CategoryController Delete on id: {id}\n Stack Trace: {ex.StackTrace}");
+                    return StatusCode(500, ex.Message);
+                }
             }
         }
     }
