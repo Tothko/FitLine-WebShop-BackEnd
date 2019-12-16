@@ -1,13 +1,20 @@
-﻿using Entities;
+﻿using AppCore.Helpers;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SQLData
 {
-    public static class DbInitializer
+    public class DbInitializer
     {
-        public static void SeedDB(FitLineContext ctx)
+        private static IAuthenticationHelper authenticationHelper;
+
+        public DbInitializer(IAuthenticationHelper authHelper)
+        {
+            authenticationHelper = authHelper;
+        }
+        public static void SeedDB(FitLineContext ctx )
         {
 
             ctx.Database.EnsureDeleted();
@@ -86,26 +93,37 @@ namespace SQLData
             ctx.SaveChanges();
         }
 
+
         private static void SeedAdmins(FitLineContext ctx)
         {
+            string password1 = "1234";
+            string password2 = "1234";
+            string password3 = "1234";
+            byte[] passwordHashMarek, passwordSaltMarek, passwordHashJan, passwordSaltJan, passwordHashSz,passwordSaltSz;
+            authenticationHelper.CreatePasswordHash(password1, out passwordHashMarek, out passwordSaltMarek);
+            authenticationHelper.CreatePasswordHash(password2, out passwordHashJan, out passwordSaltJan);
+            authenticationHelper.CreatePasswordHash(password3, out passwordHashSz, out passwordSaltSz);
             ctx.Admins.Add(new Admin
             {
                 Username = "Marek",
-                Password = "Peasant",
+                PasswordHash = passwordHashMarek,
+                PasswordSalt = passwordSaltMarek,
 
             });
 
             ctx.Admins.Add(new Admin
             {
                 Username = "Jano",
-                Password = "Th3G0d42",
+                PasswordHash = passwordHashJan,
+                PasswordSalt = passwordSaltJan,
 
             });
 
             ctx.Admins.Add(new Admin
             {
                 Username = "Szymon",
-                Password = "ToCheckHowAlmightyOurProjectIs",
+                PasswordHash = passwordHashSz,
+                PasswordSalt = passwordSaltSz,
 
             });
         }
