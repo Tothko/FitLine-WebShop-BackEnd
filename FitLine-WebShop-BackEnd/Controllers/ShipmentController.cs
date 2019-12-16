@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Application_Services;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,7 +29,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // GET api/<controller>/5
-        [Authorize(Roles = "Administrator")]
+        
         [HttpGet("{id}")]
         public ActionResult<Shipment> Get(int id)
         {

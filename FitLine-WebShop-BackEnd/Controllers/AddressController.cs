@@ -29,7 +29,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // GET api/<controller>/5
-        [Authorize]
+        
         [HttpGet("{id}")]   
         public ActionResult<Address> Get(int id)
         {
@@ -37,7 +37,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
-        [Authorize]
+        
         [HttpPost]
         public ActionResult<Address> Post([FromBody]Address address)
         {
