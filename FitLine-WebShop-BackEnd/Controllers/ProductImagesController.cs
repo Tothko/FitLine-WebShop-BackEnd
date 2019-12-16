@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class ProductImageController : Controller
+    public class ProductImagesController : Controller
     {
 
         private readonly IProductImageService _ProductImageService;
-        public ProductImageController(IProductImageService ProductImageService)
+        public ProductImagesController(IProductImageService ProductImageService)
         {
             _ProductImageService = ProductImageService;
         }

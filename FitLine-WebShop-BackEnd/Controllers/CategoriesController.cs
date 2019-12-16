@@ -14,11 +14,11 @@ using NLog.Fluent;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class CategoryController : Controller
+    public class CategoriesController : Controller
     {
 
         private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService CategoryService)
+        public CategoriesController(ICategoryService CategoryService)
         {
             _categoryService = CategoryService;
         } 

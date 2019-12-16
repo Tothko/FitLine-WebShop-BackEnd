@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class InvoiceController : Controller
+    public class InvoicesController : Controller
     {
 
         private readonly IInvoiceService _InvoiceService;
-        public InvoiceController(IInvoiceService InvoiceService)
+        public InvoicesController(IInvoiceService InvoiceService)
         {
             _InvoiceService = InvoiceService ?? throw new ArgumentNullException(nameof(InvoiceService));
         }

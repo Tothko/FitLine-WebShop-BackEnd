@@ -13,11 +13,11 @@ using NLog.Fluent;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class ProductController : Controller
+    public class ProductsController : Controller
     {
 
         private readonly IProductService _productService;
-        public ProductController(IProductService ProductService)
+        public ProducstController(IProductService ProductService)
         {
             _productService = ProductService;
         }

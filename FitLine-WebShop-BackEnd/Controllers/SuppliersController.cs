@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class SupplierController : Controller
+    public class SuppliersController : Controller
     {
 
         private readonly ISupplierService _SupplierService;
-        public SupplierController(ISupplierService SupplierService)
+        public SuppliersController(ISupplierService SupplierService)
         {
             _SupplierService = SupplierService;
         }

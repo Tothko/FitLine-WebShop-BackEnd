@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UsersController : Controller
     {
 
         private readonly IUserService _UserService;
-        public UserController(IUserService UserService)
+        public UsersController(IUserService UserService)
         {
             _UserService = UserService;
         }
