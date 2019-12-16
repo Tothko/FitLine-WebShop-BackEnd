@@ -20,6 +20,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
             _ShipmentService = ShipmentService;
         }
         // GET: api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IEnumerable<Shipment> Get()
         {
@@ -27,6 +28,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // GET api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Shipment> Get(int id)
         {
@@ -34,6 +36,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Shipment> Post([FromBody]Shipment Shipment)
         {
@@ -46,6 +49,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Shipment> Put(int id, [FromBody] Shipment Shipment)
         {
@@ -62,6 +66,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Shipment> Delete(int id)
         {

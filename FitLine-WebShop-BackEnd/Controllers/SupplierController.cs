@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Application_Services;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,13 +21,15 @@ namespace FitLine_WebShop_BackEnd.Controllers
             _SupplierService = SupplierService;
         }
         // GET: api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IEnumerable<Supplier> Get()
         {
             return _SupplierService.ReadSuppliers();
         }
 
-        // GET api/<controller>/5
+        // GET api/<controller>/>
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Supplier> Get(int id)
         {
@@ -34,6 +37,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Supplier> Post([FromBody]Supplier Supplier)
         {
@@ -54,6 +58,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Address> Put(int id, [FromBody] Supplier Supplier)
         {
@@ -78,6 +83,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Address> Delete(int id)
         {

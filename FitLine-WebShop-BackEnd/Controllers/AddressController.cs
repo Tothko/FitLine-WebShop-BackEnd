@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Application_Services;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,8 +19,9 @@ namespace FitLine_WebShop_BackEnd.Controllers
         public AddressController(IAddressService AddressService)
         {
             _AddressService = AddressService;
-        } 
+        }
         // GET: api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IEnumerable<Address> Get()
         {
@@ -27,6 +29,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // GET api/<controller>/5
+        [Authorize]
         [HttpGet("{id}")]   
         public ActionResult<Address> Get(int id)
         {
@@ -34,6 +37,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
+        [Authorize]
         [HttpPost]
         public ActionResult<Address> Post([FromBody]Address address)
         {
@@ -62,6 +66,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize]
         [HttpPut("{id}")]
         public ActionResult<Address> Put(int id, [FromBody] Address address)
         {
@@ -94,6 +99,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Address> Delete(int id)
         {

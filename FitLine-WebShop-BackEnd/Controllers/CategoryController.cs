@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AppCore.Appliaction_Services_Impl;
 using AppCore.Application_Services;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NLog.Fluent;
 
@@ -87,6 +88,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Category> Post([FromBody]Category category)
         {
@@ -123,6 +125,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Category> Put(int id, [FromBody] Category category)
         {
@@ -163,6 +166,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Category> Delete(int id)
         {

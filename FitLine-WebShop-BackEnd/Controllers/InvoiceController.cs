@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Application_Services;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,6 +35,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // POST api/<controller>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Invoice> Post([FromBody]Invoice Invoice)
         {
@@ -46,6 +48,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Invoice> Put(int id, [FromBody] Invoice Invoice)
         {
@@ -63,6 +66,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Invoice> Delete(int id)
         {
