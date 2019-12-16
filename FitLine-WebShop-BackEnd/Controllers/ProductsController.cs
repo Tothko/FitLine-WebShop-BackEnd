@@ -17,7 +17,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
     {
 
         private readonly IProductService _productService;
-        public ProducstController(IProductService ProductService)
+        public ProductsController(IProductService ProductService)
         {
             _productService = ProductService;
         }
