@@ -15,7 +15,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "It", "just", "works" };
         }
 
         // GET api/<controller>/5

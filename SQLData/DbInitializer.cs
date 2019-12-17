@@ -50,6 +50,24 @@ namespace SQLData
                     ParentCategory = null,
                 }).Entity;
 
+                var catMachines = ctx.Categories.Add(new Category
+                {
+                    Name = "Machines",
+                    ParentCategory = null,
+                }).Entity;
+
+                var catBarbells = ctx.Categories.Add(new Category
+                {
+                    Name = "Barbells",
+                    ParentCategory = null,
+                }).Entity;
+
+                var catRacks = ctx.Categories.Add(new Category
+                {
+                    Name = "Racks",
+                    ParentCategory = null,
+                }).Entity;
+
                 catSupplements.Children = new List<Category> { catAmino, catProteins };
                 ctx.Categories.Add(catSupplements);
 
