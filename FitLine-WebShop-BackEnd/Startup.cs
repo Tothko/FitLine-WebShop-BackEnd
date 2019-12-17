@@ -44,12 +44,12 @@ namespace FitLineBackEnd
         public void ConfigureServices(IServiceCollection services)
         {
             //-------------Setting up Database-----------------//
-            if (_env.IsDevelopment())
+            if (_env.IsDevelopment()) //Use SQLite in developement enviroment
             {
                 services.AddDbContext<FitLineContext>(
                     opt => opt.UseSqlite("Data Source=FitLineDB.db"));
             }
-            else if (_env.IsProduction())
+            else if (_env.IsProduction()) //Use SQL server in production enviroment
             {
                 services.AddDbContext<FitLineContext>(
                     opt => opt

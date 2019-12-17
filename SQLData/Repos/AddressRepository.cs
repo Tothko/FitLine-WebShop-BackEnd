@@ -28,8 +28,13 @@ namespace SQLData.Repos
 
         public Address Delete(int Id)
         {
-            context.Addresses.Remove(FindAddressWithID(Id));
-            context.SaveChanges();
+            var address = FindAddressWithID(Id);
+            if (address != null)
+            {
+                context.Addresses.Remove(address);
+                context.SaveChanges();
+                return address;
+            }
             return null;
         }
 

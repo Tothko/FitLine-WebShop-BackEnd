@@ -28,8 +28,13 @@ namespace SQLData.Repos
 
         public Category Delete(int Id)
         {
-            context.Categories.Remove(FindCategoryWithID(Id));
-            context.SaveChanges();
+            var category = FindCategoryWithID(Id);
+            if (category != null)
+            {
+                context.Categories.Remove(category);
+                context.SaveChanges();
+                return category;
+            }
             return null;
         }
 

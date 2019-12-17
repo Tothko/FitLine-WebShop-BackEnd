@@ -28,8 +28,13 @@ namespace SQLData.Repos
 
         public Product Delete(int Id)
         {
-            context.Products.Remove(FindProductWithID(Id));
-            context.SaveChanges();
+            var product = FindProductWithID(Id);
+            if(product != null)
+            {
+                context.Products.Remove(product);
+                context.SaveChanges();
+                return product;
+            }
             return null;
         }
 

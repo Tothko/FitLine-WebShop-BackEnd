@@ -14,7 +14,8 @@ namespace TestCore.ApplicationServices
 {
     public class ProductsServiceTest
     {
-        private IProductService GetService(Mock<IProductRepository> prodRepo = null,Mock<ICategoryRepository> catRepo= null)
+        private IProductService GetService(Mock<IProductRepository> prodRepo = null
+            ,Mock<ICategoryRepository> catRepo= null)
         {
             var productRepo = prodRepo != null ? prodRepo : new Mock<IProductRepository>();
             var categoryRepo = catRepo != null ? catRepo : new Mock<ICategoryRepository>();
