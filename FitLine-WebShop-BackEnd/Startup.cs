@@ -40,9 +40,32 @@ namespace FitLineBackEnd
             _conf = builder.Build();
         }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Byte[] secretBytes = new byte[40];
+            Random rand = new Random();
+            rand.NextBytes(secretBytes);
+
+            // Add JWT based authentication
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
+                    ValidateLifetime = true, //validate the expiration and not before values in the token
+                    ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+                };
+            });
+
+            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+
+
+
             //-------------Setting up Database-----------------//
             if (_env.IsDevelopment()) //Use SQLite in developement enviroment
             {
@@ -71,24 +94,7 @@ namespace FitLineBackEnd
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            Byte[] secretBytes = new byte[40];
-            Random rand = new Random();
-            rand.NextBytes(secretBytes);
-
-            // Add JWT based authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = false,
-                    ValidateIssuer = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
-                    ValidateLifetime = true, //validate the expiration and not before values in the token
-                    ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
-                };
-            });
-            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+            services.AddTransient<DbInitializer, DbInitializer>();
 
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IAdminService, AdminService>();
@@ -130,6 +136,7 @@ namespace FitLineBackEnd
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var ctx = scope.ServiceProvider.GetService<FitLineContext>();
+                    var DbInitializer = scope.ServiceProvider.GetService<DbInitializer>();
                     DbInitializer.SeedDB(ctx);
                 }
             }
@@ -141,7 +148,7 @@ namespace FitLineBackEnd
                     ctx.Database.EnsureCreated();
                 }
                 app.UseHsts();
-                app.UseHttpsRedirection();
+                
             }
 
   

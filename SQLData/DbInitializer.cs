@@ -8,13 +8,13 @@ namespace SQLData
 {
     public class DbInitializer
     {
-        private static IAuthenticationHelper authenticationHelper;
+        private  IAuthenticationHelper authenticationHelper;
 
         public DbInitializer(IAuthenticationHelper authHelper)
         {
             authenticationHelper = authHelper;
         }
-        public static void SeedDB(FitLineContext ctx )
+        public void SeedDB(FitLineContext ctx )
         {
 
             ctx.Database.EnsureDeleted();
@@ -88,18 +88,12 @@ namespace SQLData
                     Supplier = supp2
                 }).Entity;
             }
-            
-            SeedAdmins(ctx);
-            ctx.SaveChanges();
-        }
 
-
-        private static void SeedAdmins(FitLineContext ctx)
-        {
-            string password1 = "1234";
-            string password2 = "1234";
+            //Seeding Admins
+            string password1 = "PesoLover";
+            string password2 = "TheLazyOne";
             string password3 = "1234";
-            byte[] passwordHashMarek, passwordSaltMarek, passwordHashJan, passwordSaltJan, passwordHashSz,passwordSaltSz;
+            byte[] passwordHashMarek, passwordSaltMarek, passwordHashJan, passwordSaltJan, passwordHashSz, passwordSaltSz;
             authenticationHelper.CreatePasswordHash(password1, out passwordHashMarek, out passwordSaltMarek);
             authenticationHelper.CreatePasswordHash(password2, out passwordHashJan, out passwordSaltJan);
             authenticationHelper.CreatePasswordHash(password3, out passwordHashSz, out passwordSaltSz);
@@ -126,6 +120,11 @@ namespace SQLData
                 PasswordSalt = passwordSaltSz,
 
             });
+
+            ctx.SaveChanges();
         }
+
+
+     
     }
 }
