@@ -1,4 +1,4 @@
 language: csharp
-solution: travis-mono-test.sln
+solution: FitLine-WebShop-BackEnd.sln
 dotnet: 2.2
 mono: none
