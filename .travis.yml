@@ -1,8 +1,8 @@
 language: csharp
 solution: FitLine-WebShop-BackEnd.sln
-install:
-  - nuget restore FitLine-WebShop-BackEnd.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
-script:
-  - msbuild /p:Configuration=FitLine-WebShop-BackEnd.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./MyProject.Tests/bin/Release/MyProject.Tests.dll
+mono: none
+dotnet: 2.2
+script: 
+- dotnet restore
+- dotnet build
+- dotnet test
