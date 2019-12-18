@@ -11,6 +11,7 @@ namespace AppCore.Helpers
 {
     public class AuthenticationHelper : IAuthenticationHelper
     {
+
         private byte[] secretBytes;
 
         public AuthenticationHelper(Byte[] secret)
@@ -41,15 +42,15 @@ namespace AppCore.Helpers
         }
 
 
-        // Generates and returns a JWT token for a admin.
-        public string GenerateToken(Admin Admin)
+        // Generates and returns a JWT token for a user.
+        public string GenerateToken(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, Admin.Username)
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
-            if(Admin.Username == "Marek" || Admin.Username == "Jano")
+            if (user.IsAdmin)
                 claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
 
             var token = new JwtSecurityToken(

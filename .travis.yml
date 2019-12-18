@@ -1,0 +1,9 @@
+language: csharp
+solution: FitLine-WebShop-BackEnd.sln
+mono: none
+dotnet: 2.2
+script:
+ - cd backend
+ - dotnet restore
+ - dotnet build
+ - dotnet test

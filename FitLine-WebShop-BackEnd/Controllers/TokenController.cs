@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Application_Services;
+using AppCore.Domain_Servives;
 using AppCore.Helpers;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,38 +13,38 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitLine_WebShop_BackEnd.Controllers
 {
     [Route("/token")]
-    public class TokenController : Controller
+    [ApiController]
+    public class TokenController : ControllerBase
     {
-        private IAdminService AdminServ;
-        private IAuthenticationHelper authenticationHelper;
+        readonly IUserRepository _userRepository;
+        readonly IAuthenticationHelper _authenticationHelper;
 
-        public TokenController(IAdminService AdminService, IAuthenticationHelper authService)
+        public TokenController(IUserRepository userRepository, IAuthenticationHelper authenticationHelper)
         {
-            AdminServ = AdminService;
-            authenticationHelper = authService;
+            _userRepository = userRepository;
+            _authenticationHelper = authenticationHelper;
         }
-
 
         [HttpPost]
         public IActionResult Login([FromBody]LoginInputModel model)
         {
-            var Admin = AdminServ.ReadAdmins().FirstOrDefault(u => u.Username == model.Username);
+            var user = _userRepository.ReadUsers().FirstOrDefault(p => p.Username == model.Username);
 
             // check if username exists
-            if (Admin == null)
+            if (user == null)
                 return Unauthorized();
 
             // check if password is correct
-            if (!authenticationHelper.VerifyPasswordHash(model.Password, Admin.PasswordHash, Admin.PasswordSalt))
+            if (!_authenticationHelper.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
                 return Unauthorized();
 
             // Authentication successful
             return Ok(new
             {
-                username = Admin.Username,
-                token = authenticationHelper.GenerateToken(Admin)
+                username = user.Username,
+                isAdmin = user.IsAdmin,
+                token = _authenticationHelper.GenerateToken(user)
             });
         }
-
     }
 }

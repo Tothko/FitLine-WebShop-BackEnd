@@ -47,7 +47,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
             {
                 return BadRequest("LastName required.");
             }
-            else if (string.IsNullOrEmpty(User.Password))
+            else if (string.IsNullOrEmpty(User.PasswordHash.ToString()))
             {
                 return BadRequest("Password required.");
             }
@@ -79,7 +79,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
                 {
                     return BadRequest("LastName required.");
                 }
-                else if (string.IsNullOrEmpty(User.Password))
+                else if (string.IsNullOrEmpty(User.PasswordHash.ToString()))
                 {
                     return BadRequest("Password required.");
                 }

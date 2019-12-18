@@ -29,7 +29,7 @@ namespace FitLineBackEnd
         private IHostingEnvironment _env { get; }
         private IConfiguration _conf { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             _env = env;
             var builder = new ConfigurationBuilder()
@@ -44,6 +44,19 @@ namespace FitLineBackEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //-------------Setting up Database-----------------//
+            if (_env.IsDevelopment()) //Use SQLite in developement enviroment
+            {
+                services.AddDbContext<FitLineContext>(
+                    opt => opt.UseSqlite("Data Source=FitLineDB.db"));
+            }
+            else if (_env.IsProduction()) //Use SQL server in production enviroment
+            {
+                services.AddDbContext<FitLineContext>(
+                    opt => opt
+                        .UseSqlServer(_conf.GetConnectionString("defaultConnection")));
+            }
+
             Byte[] secretBytes = new byte[40];
             Random rand = new Random();
             rand.NextBytes(secretBytes);
@@ -62,25 +75,6 @@ namespace FitLineBackEnd
                 };
             });
 
-            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
-
-
-
-            //-------------Setting up Database-----------------//
-            if (_env.IsDevelopment()) //Use SQLite in developement enviroment
-            {
-                services.AddDbContext<FitLineContext>(
-                    opt => opt.UseSqlite("Data Source=FitLineDB.db"));
-            }
-            else if (_env.IsProduction()) //Use SQL server in production enviroment
-            {
-                services.AddDbContext<FitLineContext>(
-                    opt => opt
-                        .UseSqlServer(_conf.GetConnectionString("defaultConnection")));
-            }
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", builder =>
@@ -89,15 +83,7 @@ namespace FitLineBackEnd
                 });
             });
 
-            services.AddMvc().AddJsonOptions(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
-
-            services.AddTransient<DbInitializer, DbInitializer>();
-
-            services.AddScoped<IAdminRepository, AdminRepository>();
-            services.AddScoped<IAdminService, AdminService>();
+            // services.AddTransient<DbInitializer, DbInitializer>();
 
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAddressService, AddressService>();
@@ -125,20 +111,38 @@ namespace FitLineBackEnd
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
+
+
+
+           
+            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+           
+
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var ctx = scope.ServiceProvider.GetService<FitLineContext>();
-                    var DbInitializer = scope.ServiceProvider.GetService<DbInitializer>();
-                    DbInitializer.SeedDB(ctx);
+                    // var DbInitializer = scope.ServiceProvider.GetService<DbInitializer>();
+                    var authenticationHelper = scope.ServiceProvider.GetService<IAuthenticationHelper>();
+                    DbInitializer.SeedDB(ctx, authenticationHelper);
                 }
+                
             }
             else
             {

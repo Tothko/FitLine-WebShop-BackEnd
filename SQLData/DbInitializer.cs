@@ -6,20 +6,16 @@ using System.Linq;
 
 namespace SQLData
 {
-    public class DbInitializer
+    public static class DbInitializer
     {
-        private  IAuthenticationHelper authenticationHelper;
+        
 
-        public DbInitializer(IAuthenticationHelper authHelper)
-        {
-            authenticationHelper = authHelper;
-        }
-        public void SeedDB(FitLineContext ctx )
+        public static void SeedDB(FitLineContext ctx, IAuthenticationHelper authenticationHelper)
         {
 
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
-            if (ctx.Admins.Any())
+            if (ctx.Users.Any())
             {
                 return;   // DB has been seeded
             }
@@ -115,27 +111,30 @@ namespace SQLData
             authenticationHelper.CreatePasswordHash(password1, out passwordHashMarek, out passwordSaltMarek);
             authenticationHelper.CreatePasswordHash(password2, out passwordHashJan, out passwordSaltJan);
             authenticationHelper.CreatePasswordHash(password3, out passwordHashSz, out passwordSaltSz);
-            ctx.Admins.Add(new Admin
+            ctx.Users.Add(new User
             {
                 Username = "Marek",
                 PasswordHash = passwordHashMarek,
                 PasswordSalt = passwordSaltMarek,
+                IsAdmin = true
 
             });
 
-            ctx.Admins.Add(new Admin
+            ctx.Users.Add(new User
             {
                 Username = "Jano",
                 PasswordHash = passwordHashJan,
                 PasswordSalt = passwordSaltJan,
+                IsAdmin = true
 
-            });
+            }) ;
 
-            ctx.Admins.Add(new Admin
+            ctx.Users.Add(new User
             {
                 Username = "Szymon",
                 PasswordHash = passwordHashSz,
                 PasswordSalt = passwordSaltSz,
+                IsAdmin = false
 
             });
 

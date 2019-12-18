@@ -13,7 +13,7 @@ namespace SQLData
         {
 
         }
-        public DbSet<Admin> Admins { get; set; }
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
@@ -35,9 +35,7 @@ namespace SQLData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Admin>()
-                .HasKey(u => u.Username);
-            ;
+            
 
             modelBuilder.Entity<Product>()
                 .HasKey(oi => oi.ID);
