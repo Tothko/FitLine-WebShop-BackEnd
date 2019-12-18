@@ -1,17 +1,9 @@
-sudo: required
 language: csharp
-solution: ReviewProject.sln
-mono: none
+solution: travis-mono-test.sln
 
-addons:
-snaps:
-- name: dotnet-sdk
-confinement: classic
-channel: 2.2/stable
-
-before_script:
-- sudo snap alias dotnet-sdk.dotnet dotnet
-
-script:
-- dotnet build
-- dotnet test
+jobs:
+  include:
+    - dotnet: 2.2
+      mono: none
+      env: DOTNETCORE=2  #
+    - mono: latest
