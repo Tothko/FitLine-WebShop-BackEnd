@@ -1,9 +1,17 @@
+sudo: required
 language: csharp
-solution: FitLine-WebShop-BackEnd.sln
+solution: ReviewProject.sln
 mono: none
-dotnet: 2.2
+
+addons:
+snaps:
+- name: dotnet-sdk
+confinement: classic
+channel: 2.2/stable
+
+before_script:
+- sudo snap alias dotnet-sdk.dotnet dotnet
+
 script:
- - cd backend
- - dotnet restore
- - dotnet build
- - dotnet test
+- dotnet build
+- dotnet test
