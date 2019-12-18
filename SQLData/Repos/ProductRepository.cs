@@ -40,25 +40,36 @@ namespace SQLData.Repos
 
         public Product FindProductWithID(int Id)
         {
-            return context.Products.Include(p => p.Category).Include(p => p.Supplier).Include(p => p.Images).FirstOrDefault(p => p.ID == Id);
+            return context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .Include(p => p.Images)
+                .FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Product> ReadProducts()
         {
-            return context.Products.Include(p => p.Category).Include(p => p.Supplier).Include(p => p.Images);
+            return context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .Include(p => p.Images);
         }
 
         public IEnumerable<Product> ReadSimpleProducts()
         {
-            return context.Products;
+            return context.Products
+                .AsNoTracking()
+                .ToList();
         }
 
         public Product Update(Product ProductUpdate)
         {
             context.Attach(ProductUpdate).State = EntityState.Modified;
             context.SaveChanges();
-            return context.Products.Find(FindProductWithID(ProductUpdate.ID));
+            return ProductUpdate;
         }
     }
     }

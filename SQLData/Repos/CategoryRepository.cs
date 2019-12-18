@@ -12,7 +12,7 @@ namespace SQLData.Repos
     {
         
 
-        readonly FitLineContext context;
+        FitLineContext context;
 
         public CategoryRepository(FitLineContext ctx)
         {
@@ -40,23 +40,32 @@ namespace SQLData.Repos
 
         public Category FindCategoryWithID(int Id)
         {
-            return context.Categories.Include(p => p.Children).Include(p => p.Products).FirstOrDefault(p => p.ID == Id);
+            return context.Categories
+                .AsNoTracking()
+                .Include(p => p.Children)
+                .Include(p => p.Products)
+                .FirstOrDefault(p => p.ID == Id);
 
         }
 
         public IEnumerable<Category> ReadCategories()
         {
-            return context.Categories.Include(p => p.Children);
+            return context.Categories
+                .AsNoTracking()
+                .Include(p => p.Children);
         }
         public IEnumerable<Category> ReadSimpleCategories()
         {
-            return context.Categories;
+            return context.Categories
+                .AsNoTracking()
+                .ToList();
         }
         public Category Update(Category CategoryUpdate)
         {
             context.Attach(CategoryUpdate).State = EntityState.Modified;
+            context.Entry(CategoryUpdate).Reference(c => c.ParentCategory).IsModified = true;
             context.SaveChanges();
-            return context.Categories.Find(FindCategoryWithID(CategoryUpdate.ID));
+            return CategoryUpdate;
         }
     }
     
