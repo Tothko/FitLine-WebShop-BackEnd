@@ -34,6 +34,27 @@ namespace SQLData
                     ParentCategory = catSupplements,
                 }).Entity;
 
+                var catGainers = ctx.Categories.Add(new Category
+                {
+                    Name = "Gainers",
+                    ParentCategory = catSupplements,
+                }).Entity;
+
+
+                var catCarbohydrates = ctx.Categories.Add(new Category
+                {
+                    Name = "Carbohydrates",
+                    ParentCategory = catSupplements,
+                }).Entity;
+
+                var catMana = ctx.Categories.Add(new Category
+                {
+                    Name = "Mana",
+                    ParentCategory = catSupplements,
+                }).Entity;
+
+                
+
                 var catAmino = ctx.Categories.Add(new Category
                 {
                     Name = "Amino Acids",
@@ -46,10 +67,43 @@ namespace SQLData
                     ParentCategory = null,
                 }).Entity;
 
+                var catShirts = ctx.Categories.Add(new Category
+                {
+                    Name = "Shirts",
+                    ParentCategory = catClothing,
+                }).Entity;
+
+
+                var catPants = ctx.Categories.Add(new Category
+                {
+                    Name = "Pants",
+                    ParentCategory = catClothing,
+                }).Entity;
+
+
+                var catSocks = ctx.Categories.Add(new Category
+                {
+                    Name = "Socks",
+                    ParentCategory = catClothing,
+                }).Entity;
+
                 var catMachines = ctx.Categories.Add(new Category
                 {
                     Name = "Machines",
                     ParentCategory = null,
+                }).Entity;
+
+                var catTwr = ctx.Categories.Add(new Category
+                {
+                    Name = "Tower",
+                    ParentCategory = catMachines,
+                }).Entity;
+
+
+                var catSmthMach= ctx.Categories.Add(new Category
+                {
+                    Name = "Smith Machine",
+                    ParentCategory = catMachines,
                 }).Entity;
 
                 var catBarbells = ctx.Categories.Add(new Category
@@ -79,16 +133,39 @@ namespace SQLData
                     Name = "Scitec"
                 }).Entity;
 
+                var supp3 = ctx.Suppliers.Add(new Supplier
+                {
+                    Name = "BodyWorld"
+                }).Entity;
+
+                var supp4 = ctx.Suppliers.Add(new Supplier
+                {
+                    Name = "StillMass"
+                }).Entity;
+
+                var supp5= ctx.Suppliers.Add(new Supplier
+                {
+                    Name = "Marekové sypačky"
+                }).Entity;
+
+
                 //Seeding products
                 var prod1 = ctx.Products.Add(new Product
                 {
                     Category = catProteins,
                     Name = "Whey Protein",
-                    Description = "will make you into big guy",
-                    Price = 20.14,
-                    Amount = 500,
+                    Description = "will make you into big guy like me",
+                    Price = 40.99,
+                    Amount = 2500,
                     Rating = 4.5,
                     Supplier = supp1
+                }).Entity;
+
+                var image1 = ctx.ProductImages.Add(new ProductImage
+
+                {
+                    Product = prod1,
+                    url = "https://body-stuff.dk/media/cache/product_original/product-images/46/8/scitec_100_whey_protein_pro_2350g_chocolate_hazelnut1531142017.6064.jpg?1531142017"
                 }).Entity;
 
                 var prod2 = ctx.Products.Add(new Product
@@ -101,7 +178,103 @@ namespace SQLData
                     Rating = 4.1,
                     Supplier = supp2
                 }).Entity;
+
+                var prod3 = ctx.Products.Add(new Product
+                {
+                    Category = catProteins,
+                    Name = "Soy Protein",
+                    Description = "Only girls are using this product",
+                    Price = 20.14,
+                    Amount = 800,
+                    Rating = 2.5,
+                    Supplier = supp3
+                }).Entity;
+
+                var image3 = ctx.ProductImages.Add(new ProductImage
+
+                {
+                    Product = prod3,
+                    url = "https://www.bodyworld.cz/images/products/protein-soy-80-protein-weider-800-g-detail.jpg"
+                }).Entity;
+
+
+                var prod4 = ctx.Products.Add(new Product
+                {
+                    Category = catProteins,
+                    Name = "Whey Protein",
+                    Description = "Smaller portion for smaller ... ",
+                    Price = 20.99,
+                    Amount = 870,
+                    Rating = 4.5,
+                    Supplier = supp1
+                }).Entity;
+
+                var image4 = ctx.ProductImages.Add(new ProductImage
+
+                {
+                    Product = prod4,
+                    url = "https://sporttimekka.fi/wp-content/uploads/2018/12/Scitec-Whey-Protein-Professional-ISO.jpg"
+                }).Entity;
+
+
+                var prod5 = ctx.Products.Add(new Product
+                {
+                    Category = catRacks,
+                    Name = "Basic Rack",
+                    Description = "Totally not for this webpage",
+                    Price = 100,
+                    Amount = 1,
+                    Rating = 5,
+                    Supplier = supp1
+                }).Entity;
+
+                var image5 = ctx.ProductImages.Add(new ProductImage
+
+                {
+                    Product = prod5,
+                    url = "https://5.imimg.com/data5/PI/LH/MY-4092020/adjustable-racks-500x500.png"
+                }).Entity;
             }
+
+           /* for (int i = 0; i < 30; i++)
+
+
+
+
+            {
+                var forCat = ctx.Categories.Add(new Category
+                {
+                    Name = "Clothing",
+                    ParentCategory = null,
+                }).Entity;
+
+                var forSupp = ctx.Suppliers.Add(new Supplier
+                {
+                    Name = "Scitec"
+                }).Entity;
+
+
+                var forProd = ctx.Products.Add(new Product
+                {
+                    Category = forCat,
+                    Name = "Product" +i,
+                    Description = "Mocked tool",
+                    Price = 100,
+                    Amount = 1,
+                    Rating = 5,
+                    Supplier = forSupp
+                }).Entity;
+
+                var forImage = ctx.ProductImages.Add(new ProductImage
+
+                {
+                    Product = forProd,
+                    url = "https://5.imimg.com/data5/PI/LH/MY-4092020/adjustable-racks-500x500.png"
+                }).Entity;
+            }*/
+
+
+        
 
             //Seeding Admins
             string password1 = "PesoLover";
