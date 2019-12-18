@@ -185,7 +185,7 @@ namespace FitLine_WebShop_BackEnd.Controllers
                 }
                 else
                 {
-                    return BadRequest("Product creation failed");
+                    return BadRequest("Product update failed");
                 }
             }
             catch (ArgumentException err)
